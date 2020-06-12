@@ -1,0 +1,36 @@
+---
+
+- name: Copying necessarily files for standart boot
+  copy:
+    src: "/usr/share/syslinux/{{ item.name }}"
+    dest: "{{ item.dest }}"
+    remote_src: yes
+  with_items:
+    - { name: pxelinux.0, dest: "{{ global_tftp_root }}/pxelinux.0" }
+    - { name: vesamenu.c32, dest: "{{ global_tftp_root }}/vesamenu.c32" }
+    - { name: menu.c32, dest: "{{ global_tftp_root }}/menu.c32" }
+    - { name: memdisk, dest: "{{ global_tftp_root }}/memdisk" }
+    - { name: mboot.c32, dest: "{{ global_tftp_root }}/mboot.c32" }
+    - { name: chain.c32, dest: "{{ global_tftp_root }}/chain.c32" }
+
+- name: Copying necessarily files for UEFI boot
+  copy: 
+    src: "/boot/efi/EFI/centos/{{ item.name }}"
+    dest: "{{ item.dest }}"
+    remote_src: yes
+  with_items:
+    - { name: shim.efi, dest: "{{ global_tftp_root }}/uefi/shim.efi" }
+    - { name: grubx64.efi, dest: "{{ global_tftp_root }}/uefi/grubx64.efi" }
+
+- name: Copying UEFI grub configuration file
+  template: src=grub.cfg.j2 dest={{ global_tftp_root }}/uefi/grub.cfg force=yes
+  ignore_errors: false
+
+- name: Copying Apache2 configuration file
+  template: src=pxeboot.conf.j2 dest=/etc/httpd/conf.d/pxeboot.conf force=yes
+  ignore_errors: false
+
+- name: Copying PXE configuration file
+  template: src=default.j2 dest=/local/tftpboot/pxelinux.cfg/default force=yes mode=0777
+  ignore_errors: false
+

@@ -1,0 +1,11 @@
+---
+
+- name: restart xinetd
+  service: name=xinetd state=restarted
+
+- name: restart nfs-server
+  service: name=nfs-server state=restarted
+
+- name: restart rpcbind
+  service: name=rpcbind state=restarted
+

@@ -20,17 +20,16 @@
   tasks:
    - include_role: name=firewalld
    - include_role: name=ntp
-   - include_role: name=db
    - include_role: name=minimal
    - include_role: name=reboot
 
-- name: Compile SOGo groupware
+- name: Installing and configuring PXE Server
   hosts: all
   remote_user: root
-  tags: sogo_setup
+  tags: pxe_setup
   gather_facts: yes
 
   roles:
-   - rpmbuild-env
-   - sogo
-#   - reboot
+   - pxe-server
+   - reboot
+

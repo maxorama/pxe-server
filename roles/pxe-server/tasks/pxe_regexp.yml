@@ -1,0 +1,14 @@
+---
+
+- name: Regexp TFTP xinet.d config
+  replace:
+   path: /etc/xinetd.d/tftp
+   regexp: '(server_args\s+.*=\s+-s)(\s+.*)?'
+   replace: '\1 {{ global_tftp_root }}'
+
+- name: Regexp TFTP xinet.d config
+  replace:
+   path: /etc/xinetd.d/tftp
+   regexp: '(disable\s+.*=)(\s+.*)?'
+   replace: '\1 no'
+

@@ -1,0 +1,26 @@
+---
+
+- name: Installing PXE-Server
+  dnf:
+   name: ['xinetd','syslinux','tftp-server','dracut-network','nfs-utils','mokutil','grub2-efi','shim-x64']
+   state: present
+  register: result
+  ignore_errors: False
+
+- include: pxe_create_dirs.yml
+- include: pxe_copy_files.yml
+- include: pxe_regexp.yml
+- include: pxe_firewalld_rules.yml
+
+- name: Enable service xinetd
+  service: name=xinetd state=started enabled=yes
+  notify: restart xinetd
+
+- name: Enable service nfs-server
+  service: name=nfs-server state=started enabled=yes
+  notify: restart nfs-server
+
+- name: Enable service rpcbind
+  service: name=rpcbind state=started enabled=yes
+  notify: restart rpcbind
+

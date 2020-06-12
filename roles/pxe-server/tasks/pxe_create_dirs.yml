@@ -1,0 +1,17 @@
+---
+
+- name: Creating local TFTP directory
+  file:
+    path: "{{ global_tftp_root }}"
+    state: directory
+    mode: "u=rwx,g=rx,o=rx"
+
+- name: Creating internal TFTP directories
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: "u=rwx,g=rx,o=rx"
+  with_items:
+    - "{{ global_tftp_root }}/uefi"
+    - "{{ global_tftp_root }}/pxelinux.cfg"
+
