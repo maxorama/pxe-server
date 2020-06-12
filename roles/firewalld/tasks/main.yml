@@ -1,0 +1,19 @@
+---
+### Installing and configuring firewallD
+- name: Install libselinux-python
+  dnf: name=libselinux-python state=present
+
+- name: Install libsemanage-python
+  dnf: name=libsemanage-python state=present
+
+- name: Disable SELinux
+  selinux: state=disabled
+
+- name: Install Firewalld
+  dnf: name=firewalld state=present
+
+- name: Firewalld service state
+  service: name=firewalld state=started enabled=yes
+
+- include: rules.yml
+

@@ -1,0 +1,21 @@
+---
+
+- name: Setting hostname
+  hostname: name={{ hostname }}
+
+# Download and install EPEL for Centos/RHEL version 7
+- name: Download EPEL Repo - Centos/RHEL 7
+  dnf: name=epel-release state=present
+
+- name: Upgrade all packages
+  dnf: name=* state=latest
+
+- name: Installing minimal soft
+  dnf:
+   name: ['bash-completion', 'mc', 'vim', 'net-tools', 'bzip2', 'zip', 'p7zip', 'p7zip-plugins', 'unzip']
+   state: present
+  register: result
+  ignore_errors: False
+
+- include: install_httpd.yml
+

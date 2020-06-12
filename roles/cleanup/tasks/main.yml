@@ -1,0 +1,22 @@
+---
+
+- name: Installing dnf package
+  yum: name=dnf state=present
+
+- name: Removing Cloud-Init package...
+  dnf: name=cloud-init state=absent
+
+- name: Removing vagrant user...
+  user:
+   name: vagrant
+   state: absent
+  
+- name: Removing vagrant group...
+  user:
+   name: vagrant
+   state: absent
+
+- name: Removing vagrant directory...
+  file:
+   path: /vagrant/
+   state: absent
