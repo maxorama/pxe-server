@@ -9,6 +9,17 @@
   command: timedatectl set-local-rtc 1
   ignore_errors: false
 
+- name: Remove ETC time
+  file:
+    path: /etc/localtime
+    state: absent
+
+- name: Creating symlinks for Europe/Moscow time
+  file:
+    src: /usr/share/zoneinfo/Europe/Moscow
+    dest: /etc/localtime
+    state: link
+
 - name: Configure ntp file
   template: src=chrony.conf.j2 dest=/etc/chrony.conf
   tags: chrony
