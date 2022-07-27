@@ -2,13 +2,25 @@
 
 - name: Regexp TFTP xinet.d config
   replace:
-   path: /etc/xinetd.d/tftp
-   regexp: '(server_args\s+.*=\s+-s)(\s+.*)?'
-   replace: '\1 {{ global_tftp_root }}'
+    path: /etc/xinetd.d/tftp
+    regexp: '(server_args\s+.*=\s+-s)(\s+.*)?'
+    replace: '\1 {{ global_tftp_root }}'
+  when: ansible_facts['distribution'] == 'CentOS' and ansible_facts['distribution_major_version'] == '7'
 
 - name: Regexp TFTP xinet.d config
   replace:
-   path: /etc/xinetd.d/tftp
-   regexp: '(disable\s+.*=)(\s+.*)?'
-   replace: '\1 no'
+    path: /etc/xinetd.d/tftp
+    regexp: '(disable\s+.*=)(\s+.*)?'
+    replace: '\1 no'
+  when: ansible_facts['distribution'] == 'CentOS' and ansible_facts['distribution_major_version'] == '7'
 
+- name: Regexp TFTP service
+  replace:
+    path: /usr/lib/systemd/system/tftp.service
+    regexp: '(ExecStart=/usr/sbin/in.tftpd -s)(\s+.*)?'
+    replace: '\1 {{ global_tftp_root }}'
+  when: ( ansible_facts['distribution'] == 'CentOS' or ansible_facts['distribution'] == 'OracleLinux' ) and ansible_facts['distribution_major_version'] == '8'
+
+- name: Daemon-reload TFTP service
+  shell: systemctl daemon-reload
+  when: ( ansible_facts['distribution'] == 'CentOS' or ansible_facts['distribution'] == 'OracleLinux' ) and ansible_facts['distribution_major_version'] == '8'

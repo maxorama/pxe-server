@@ -2,9 +2,11 @@
 ### Installing and configuring firewallD
 - name: Install libselinux-python
   dnf: name=libselinux-python state=present
+  when: ansible_facts['distribution'] == 'CentOS' and ansible_facts['distribution_major_version'] == 7
 
 - name: Install libsemanage-python
   dnf: name=libsemanage-python state=present
+  when: ansible_facts['distribution'] == 'CentOS' and ansible_facts['distribution_major_version'] == 7
 
 - name: Disable SELinux
   selinux: state=disabled

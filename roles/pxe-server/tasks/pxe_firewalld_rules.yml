@@ -1,28 +1,27 @@
 
 - name: Opening TFTP ports
   firewalld:
-   port: 69/tcp
-   zone: public
-   permanent: true
-   state: enabled
-   immediate: yes
+    port: 69/tcp
+    zone: public
+    permanent: true
+    state: enabled
+    immediate: yes
   ignore_errors: true
 
 - name: Opening TFTP ports
   firewalld:
-   port: 69/udp
-   zone: public
-   permanent: true
-   state: enabled
-   immediate: yes
+    port: 69/udp
+    zone: public
+    permanent: true
+    state: enabled
+    immediate: yes
   ignore_errors: true
 
 - name: Opening NFS Server ports
   firewalld:
-   service: nfs
-   zone: public
-   permanent: true
-   state: enabled
-   immediate: yes
+    service: nfs
+    zone: public
+    permanent: true
+    state: enabled
+    immediate: yes
   ignore_errors: true
-

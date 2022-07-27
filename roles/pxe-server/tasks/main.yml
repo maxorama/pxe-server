@@ -2,8 +2,8 @@
 
 - name: Installing PXE-Server
   dnf:
-   name: ['xinetd','syslinux','tftp-server','dracut-network','nfs-utils','mokutil','grub2-efi','shim-x64']
-   state: present
+    name: ['xinetd','syslinux','tftp-server','dracut-network','nfs-utils','mokutil','grub2-efi','shim-x64']
+    state: present
   register: result
   ignore_errors: False
 
@@ -23,4 +23,3 @@
 - name: Enable service rpcbind
   service: name=rpcbind state=started enabled=yes
   notify: restart rpcbind
-

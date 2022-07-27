@@ -6,21 +6,58 @@
     dest: "{{ item.dest }}"
     remote_src: yes
   with_items:
+    - { name: chain.c32, dest: "{{ global_tftp_root }}/chain.c32" }
+    - { name: mboot.c32, dest: "{{ global_tftp_root }}/mboot.c32" }
+    - { name: memdisk, dest: "{{ global_tftp_root }}/memdisk" }
+    - { name: menu.c32, dest: "{{ global_tftp_root }}/menu.c32" }
     - { name: pxelinux.0, dest: "{{ global_tftp_root }}/pxelinux.0" }
     - { name: vesamenu.c32, dest: "{{ global_tftp_root }}/vesamenu.c32" }
-    - { name: menu.c32, dest: "{{ global_tftp_root }}/menu.c32" }
-    - { name: memdisk, dest: "{{ global_tftp_root }}/memdisk" }
-    - { name: mboot.c32, dest: "{{ global_tftp_root }}/mboot.c32" }
+  when: ansible_facts['distribution'] == 'CentOS' and ansible_facts['distribution_major_version'] == '7'
+
+- name: Copying necessarily files for standart boot
+  copy:
+    src: "/usr/share/syslinux/{{ item.name }}"
+    dest: "{{ item.dest }}"
+    remote_src: yes
+  with_items:
     - { name: chain.c32, dest: "{{ global_tftp_root }}/chain.c32" }
+    - { name: ldlinux.c32, dest: "{{ global_tftp_root }}/ldlinux.c32" }
+    - { name: libcom32.c32, dest: "{{ global_tftp_root }}/libcom32.c32" }
+    - { name: libutil.c32, dest: "{{ global_tftp_root }}/libutil.c32" }
+    - { name: mboot.c32, dest: "{{ global_tftp_root }}/mboot.c32" }
+    - { name: memdisk, dest: "{{ global_tftp_root }}/memdisk" }
+    - { name: menu.c32, dest: "{{ global_tftp_root }}/menu.c32" }
+    - { name: pxelinux.0, dest: "{{ global_tftp_root }}/pxelinux.0" }
+    - { name: vesamenu.c32, dest: "{{ global_tftp_root }}/vesamenu.c32" }
+  when: ( ansible_facts['distribution'] == 'CentOS' or ansible_facts['distribution'] == 'OracleLinux' ) and ansible_facts['distribution_major_version'] == '8'
+
+- set_fact:
+    os_version: ansible_facts['distribution'] | lower
+  when: ansible_facts['distribution'] == 'CentOS' and ( ansible_facts['distribution_major_version'] == '7' or ansible_facts['distribution_major_version'] == '8' )
+
+- set_fact:
+    os_version: 'redhat'
+  when: ( ansible_facts['distribution'] == 'OracleLinux' and ansible_facts['distribution_major_version'] == '8' )
 
 - name: Copying necessarily files for UEFI boot
   copy: 
-    src: "/boot/efi/EFI/centos/{{ item.name }}"
+    src: "/boot/efi/EFI/{{ os_version }}/{{ item.name }}"
     dest: "{{ item.dest }}"
     remote_src: yes
   with_items:
     - { name: shim.efi, dest: "{{ global_tftp_root }}/uefi/shim.efi" }
     - { name: grubx64.efi, dest: "{{ global_tftp_root }}/uefi/grubx64.efi" }
+  when: uefi == "yes" and ( ansible_facts['distribution'] == 'CentOS' and ansible_facts['distribution_major_version'] == '7' )
+
+- name: Copying necessarily files for UEFI boot
+  copy:
+    src: "/boot/efi/EFI/{{ os_version }}/{{ item.name }}"
+    dest: "{{ item.dest }}"
+    remote_src: yes
+  with_items:
+    - { name: shimx64.efi, dest: "{{ global_tftp_root }}/uefi/shimx64.efi" }
+###    - { name: grubx64.efi, dest: "{{ global_tftp_root }}/uefi/grubx64.efi" }
+  when: uefi == "yes" and ( ( ansible_facts['distribution'] == 'CentOS' or ansible_facts['distribution'] == 'OracleLinux' ) and ansible_facts['distribution_major_version'] == '8' )
 
 - name: Copying UEFI grub configuration file
   template: src=grub.cfg.j2 dest={{ global_tftp_root }}/uefi/grub.cfg force=yes
@@ -33,4 +70,3 @@
 - name: Copying PXE configuration file
   template: src=default.j2 dest=/local/tftpboot/pxelinux.cfg/default force=yes mode=0777
   ignore_errors: false
-

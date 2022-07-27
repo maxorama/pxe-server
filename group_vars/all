@@ -8,3 +8,4 @@ allow_network: 192.168.10.0/24
 host_ip: 192.168.10.101
 hostname: pxe
 global_tftp_root: /local/tftpboot
+uefi: "yes"
