@@ -1,7 +1,7 @@
 ---
 # This playbook deploys the whole application stack in this site.
 
-#- import_playbook: common.yml
+- import_playbook: common.yml
 
 - name: Installing and configuring PXE Server
   hosts: all
