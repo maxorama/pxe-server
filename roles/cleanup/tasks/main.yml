@@ -2,6 +2,7 @@
 
 - name: Installing dnf package
   yum: name=dnf state=present
+  when: ( ansible_facts['distribution'] == 'CentOS' or ansible_facts['distribution'] == 'OracleLinux' ) and ansible_facts['distribution_major_version'] == '8'
 
 - name: Removing Cloud-Init package...
   dnf: name=cloud-init state=absent

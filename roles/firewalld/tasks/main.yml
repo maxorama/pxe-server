@@ -16,4 +16,3 @@
   service: name=firewalld state=started enabled=yes
 
 - include: rules.yml
-

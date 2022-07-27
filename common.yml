@@ -1,0 +1,24 @@
+---
+# This playbook deploys the whole application stack in this site.
+
+- name: Cleanup Cloud-init
+  hosts: all
+  remote_user: root
+  tags: cleanup
+  gather_facts: yes
+
+  roles:
+    - cleanup
+    - reboot
+
+- name: Deploy common configuration
+  hosts: all
+  remote_user: root
+  tags: common
+  gather_facts: yes
+
+  tasks:
+    - include_role: name=firewalld
+    - include_role: name=ntp
+    - include_role: name=minimal
+    - include_role: name=reboot
