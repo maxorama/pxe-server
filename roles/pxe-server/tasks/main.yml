@@ -6,6 +6,15 @@
     state: present
   register: result
   ignore_errors: False
+  when: ansible_facts['distribution'] == 'CentOS' and ansible_facts['distribution_major_version'] == '8'
+
+- name: Installing PXE-Server
+  dnf:
+    name: ['xinetd','syslinux','tftp-server','dracut-network','nfs-utils','mokutil','grub2-efi-x64','shim-x64']
+    state: present
+  register: result
+  ignore_errors: False
+  when: ( ansible_facts['distribution'] == 'CentOS' or ansible_facts['distribution'] == 'OracleLinux' ) and ansible_facts['distribution_major_version'] == '8'
 
 - include: pxe_create_dirs.yml
 - include: pxe_copy_files.yml
@@ -15,6 +24,11 @@
 - name: Enable service xinetd
   service: name=xinetd state=started enabled=yes
   notify: restart xinetd
+
+- name: Enable service tftp
+  service: name=tftp state=started enabled=yes
+  notify: restart tftp
+  when: ( ansible_facts['distribution'] == 'CentOS' or ansible_facts['distribution'] == 'OracleLinux' ) and ansible_facts['distribution_major_version'] == '8'
 
 - name: Enable service nfs-server
   service: name=nfs-server state=started enabled=yes

@@ -55,8 +55,8 @@
     dest: "{{ item.dest }}"
     remote_src: yes
   with_items:
-    - { name: shimx64.efi, dest: "{{ global_tftp_root }}/uefi/shimx64.efi" }
-###    - { name: grubx64.efi, dest: "{{ global_tftp_root }}/uefi/grubx64.efi" }
+    - { name: shimx64.efi, dest: "{{ global_tftp_root }}/uefi/shim.efi" }
+    - { name: grubx64.efi, dest: "{{ global_tftp_root }}/uefi/grubx64.efi" }
   when: uefi == "yes" and ( ( ansible_facts['distribution'] == 'CentOS' or ansible_facts['distribution'] == 'OracleLinux' ) and ansible_facts['distribution_major_version'] == '8' )
 
 - name: Copying UEFI grub configuration file
