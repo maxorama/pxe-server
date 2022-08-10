@@ -50,6 +50,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 #  config.vm.provision "ansible" do |ansible|
 #    ansible.verbose = "v"
 #    ansible.playbook = "site.yml"
+#    ansible.become = true
 #    ansible.compatibility_mode = "2.0"
+#    ansible.host_key_checking = false
+#    ansible.extra_vars = { ansible_ssh_user: 'vagrant'}
 #  end
 end
