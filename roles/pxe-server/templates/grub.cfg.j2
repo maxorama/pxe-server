@@ -7,6 +7,6 @@ set hidden_timeout_quiet=false
 insmod png
 
 menuentry 'Install CentOS 7' {
-        linuxefi centos7_x64/images/pxeboot/vmlinuz method=http://{{ host_ip }}/centos7_x64 devfs=nomount
+        linuxefi centos7_x64/images/pxeboot/vmlinuz method=http://{{ ansible_default_ipv4.address }}/centos7_x64 devfs=nomount
         initrdefi centos7_x64/images/pxeboot/initrd.img
 }

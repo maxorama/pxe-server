@@ -5,7 +5,6 @@ domain: { global: "domain.ru", local: "domain.local" }
 httpd_port: 80
 ntpserver: 192.168.10.1
 allow_network: 192.168.10.0/24
-host_ip: 192.168.10.3
 hostname: pxe
 global_tftp_root: /local/tftpboot
 uefi: "yes"

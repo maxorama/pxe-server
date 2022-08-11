@@ -3,13 +3,14 @@
 
 - name: Cleanup Cloud-init
   hosts: all
+  become: yes
+  become_user: root
   remote_user: root
   tags: cleanup
   gather_facts: yes
 
   roles:
     - cleanup
-    - reboot
 
 - name: Deploy common configuration
   hosts: all
@@ -21,4 +22,12 @@
     - include_role: name=firewalld
     - include_role: name=ntp
     - include_role: name=minimal
-    - include_role: name=reboot
+
+- name: Rebooting host
+  hosts: all
+  become: no
+  remote_user: vagrant
+  gather_facts: yes
+
+  roles:
+    - reboot
