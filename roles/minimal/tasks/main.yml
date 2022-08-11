@@ -4,7 +4,7 @@
   hostname: name={{ hostname }}
 
 # Download and install EPEL for Centos/RHEL version 7
-- name: Download EPEL Repo - Centos/RHEL 7
+- name: Download EPEL Repo - Centos/RHEL 7/8
   dnf: name=epel-release state=present
   when: ansible_facts['distribution'] == 'CentOS' and ( ansible_facts['distribution_major_version'] == '7' or ansible_facts['distribution_major_version'] == '8' )
 
