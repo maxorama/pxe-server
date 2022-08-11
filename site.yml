@@ -11,4 +11,12 @@
 
   roles:
    - pxe-server
-   - reboot
+
+- name: Rebooting host
+  hosts: all
+  become: no
+  remote_user: vagrant
+  gather_facts: yes
+
+  roles:
+    - reboot
